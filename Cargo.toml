@@ -1,6 +1,6 @@
 [package]
 name = "cim-workflow-graph"
-version = "0.1.0"
+version = "0.3.0"
 edition = "2021"
 authors = ["The Cowboy AI"]
 description = "Workflow graph implementation composing CIM context graphs with workflow domain"
