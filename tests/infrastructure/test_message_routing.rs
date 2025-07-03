@@ -200,10 +200,10 @@ impl WorkflowCommandRouter {
         handler: Box<dyn WorkflowCommandHandler>,
     ) -> Result<String, String> {
         let command_type = handler.command_type().to_string();
-        let handler_id = format!("handler_{}", command_type);
+        let handler_id = format!("handler_{command_type}");
 
         if self.handlers.contains_key(&command_type) {
-            return Err(format!("Handler already registered for {}", command_type));
+            return Err(format!("Handler already registered for {command_type}"));
         }
 
         self.handlers.insert(command_type.clone(), handler);
@@ -220,7 +220,7 @@ impl WorkflowCommandRouter {
 
         let (response, handler_id) = if let Some(handler) = self.handlers.get(&command_type) {
             let response = handler.handle(command);
-            (response, format!("handler_{}", command_type))
+            (response, format!("handler_{command_type}"))
         } else if let Some(fallback) = &self.fallback_handler {
             self.stats.fallback_count += 1;
             let response = fallback.handle(command);
@@ -250,7 +250,7 @@ impl WorkflowCommandRouter {
     pub fn remove_handler(&mut self, command_type: &str) -> Result<(), String> {
         self.handlers
             .remove(command_type)
-            .ok_or_else(|| format!("Handler not found for {}", command_type))?;
+            .ok_or_else(|| format!("Handler not found for {command_type}"))?;
         Ok(())
     }
 
@@ -295,9 +295,7 @@ impl RoutingEventValidator {
 
     pub fn validate(&self) -> Result<(), String> {
         if self.captured_events.len() != self.expected_events.len() {
-            return Err(format!(
-                "Event count mismatch: expected {}, got {}",
-                self.expected_events.len(),
+            return Err(format!("Event count mismatch: expected {self.expected_events.len(}, got {}"),
                 self.captured_events.len()
             ));
         }
@@ -307,10 +305,7 @@ impl RoutingEventValidator {
             .enumerate()
         {
             if expected != actual {
-                return Err(format!(
-                    "Event mismatch at position {}: expected {:?}, got {:?}",
-                    i, expected, actual
-                ));
+                return Err(format!("Event mismatch at position {i}: expected {:?}, got {:?}", expected, actual));
             }
         }
 
@@ -502,7 +497,7 @@ mod tests {
         // Act - Route multiple commands
         for i in 0..5 {
             let command = WorkflowCommand::CreateWorkflow {
-                name: format!("Workflow {}", i),
+                name: format!("Workflow {i}"),
                 description: "Test".to_string(),
             };
             router.route_command(&command);
@@ -553,7 +548,7 @@ mod tests {
             let handler = Box::new(MockWorkflowHandler::new(
                 cmd_type.to_string(),
                 CommandResponse::Success {
-                    message: format!("{} handled", cmd_type),
+                    message: format!("{cmd_type} handled"),
                 },
             ));
             router.register_handler(handler).unwrap();
@@ -564,16 +559,16 @@ mod tests {
         for i in 0..9 {
             let command = match i % 3 {
                 0 => WorkflowCommand::CreateWorkflow {
-                    name: format!("Workflow {}", i),
+                    name: format!("Workflow {i}"),
                     description: "Test".to_string(),
                 },
                 1 => WorkflowCommand::AddStep {
-                    workflow_id: format!("wf-{}", i),
-                    step_name: format!("Step {}", i),
+                    workflow_id: format!("wf-{i}"),
+                    step_name: format!("Step {i}"),
                     step_type: "Manual".to_string(),
                 },
                 _ => WorkflowCommand::StartWorkflow {
-                    workflow_id: format!("wf-{}", i),
+                    workflow_id: format!("wf-{i}"),
                     context: HashMap::new(),
                 },
             };

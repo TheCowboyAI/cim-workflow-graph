@@ -158,7 +158,7 @@ impl MockNatsClient {
 
         let sequence = stream.messages.len() as u64 + 1;
         let global_sequence = self.published_messages.len() as u64 + 1;
-        let ack_id = format!("ack_{}_{}", global_sequence, sequence);
+        let ack_id = format!("ack_{global_sequence}_{sequence}");
 
         let message = MockMessage {
             subject: subject.to_string(),
@@ -230,7 +230,7 @@ impl MockNatsClient {
         let next_seq = consumer.delivered.len();
         if next_seq < stream.messages.len() {
             let message = &stream.messages[next_seq];
-            let event_id = format!("evt_{}", next_seq);
+            let event_id = format!("evt_{next_seq}");
             consumer.delivered.push(event_id.clone());
             Ok(Some((event_id, message.payload.clone())))
         } else {
@@ -283,9 +283,7 @@ impl NatsEventValidator {
 
     pub fn validate(&self) -> Result<(), String> {
         if self.captured_events.len() != self.expected_events.len() {
-            return Err(format!(
-                "Event count mismatch: expected {}, got {}",
-                self.expected_events.len(),
+            return Err(format!("Event count mismatch: expected {self.expected_events.len(}, got {}"),
                 self.captured_events.len()
             ));
         }
@@ -295,10 +293,7 @@ impl NatsEventValidator {
             .enumerate()
         {
             if expected != actual {
-                return Err(format!(
-                    "Event mismatch at position {}: expected {:?}, got {:?}",
-                    i, expected, actual
-                ));
+                return Err(format!("Event mismatch at position {i}: expected {:?}, got {:?}", expected, actual));
             }
         }
 
