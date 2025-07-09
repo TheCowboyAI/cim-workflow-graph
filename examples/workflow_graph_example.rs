@@ -21,8 +21,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     )?;
 
     println!("📝 Creating Document Approval Workflow...");
-    println!("   Name: {workflow.name(}"));
-    println!("   Description: {workflow.description(}"));
+    println!("   Name: {}", workflow.name());
+    println!("   Description: {}", workflow.description());
     println!("   Status: {:?}", workflow.status());
 
     // Add metadata
@@ -160,12 +160,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Display workflow statistics
     let stats = workflow.statistics();
     println!("\n📊 Workflow Statistics:");
-    println!("   • Total nodes: {stats.total_nodes}");
-    println!("   • Step nodes: {stats.step_nodes}");
-    println!("   • Total edges: {stats.total_edges}");
-    println!("   • Dependency edges: {stats.dependency_edges}");
-    println!("   • Max depth: {stats.max_depth}");
-    println!("   • Is cyclic: {stats.is_cyclic}");
+    println!("   • Total nodes: {}", stats.total_nodes);
+    println!("   • Step nodes: {}", stats.step_nodes);
+    println!("   • Total edges: {}", stats.total_edges);
+    println!("   • Dependency edges: {}", stats.dependency_edges);
+    println!("   • Max depth: {}", stats.max_depth);
+    println!("   • Is cyclic: {}", stats.is_cyclic);
 
     // Show step analysis
     println!("\n📋 Step Analysis:");
@@ -193,7 +193,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Show dependency analysis
     println!("\n🔗 Dependency Analysis:");
     for edge in workflow.get_dependency_edges() {
-        println!("   • {edge.source} → {edge.target} ({edge.edge_type})");
+        println!("   • {} → {} ({})", edge.source, edge.target, edge.edge_type);
     }
 
     // Export to JSON
@@ -209,7 +209,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("   ... (truncated)");
 
     // Show JSON size
-    println!("   📏 JSON size: {json.len(} bytes"));
+    println!("   📏 JSON size: {} bytes", json.len());
 
     // Export to DOT format
     println!("\n🎨 Exporting to DOT format (for Graphviz)...");
@@ -241,8 +241,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Find executable steps
     let executable_steps = workflow.get_executable_steps();
-    println!("   📝 Executable steps: {executable_steps.len(} steps ready")
-    );
+    println!("   📝 Executable steps: {} steps ready", executable_steps.len());
 
     // Find steps by type
     let manual_steps = workflow.find_steps_by_type(StepType::Manual);
@@ -250,9 +249,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let approval_steps = workflow.find_steps_by_type(StepType::Approval);
 
     println!("\n📊 Steps by Type:");
-    println!("   • Manual steps: {manual_steps.len(}"));
-    println!("   • Automated steps: {automated_steps.len(}"));
-    println!("   • Approval steps: {approval_steps.len(}"));
+    println!("   • Manual steps: {}", manual_steps.len());
+    println!("   • Automated steps: {}", automated_steps.len());
+    println!("   • Approval steps: {}", approval_steps.len());
 
     // Calculate estimated total time
     let total_time: u32 = workflow
