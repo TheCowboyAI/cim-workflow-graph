@@ -11,7 +11,7 @@ categories = ["data-structures", "algorithms"]
 
 [dependencies]
 cim-contextgraph = { path = "../cim-contextgraph" }
-cim-domain = { path = "../cim-domain" }
+cim-domain = { git = "https://github.com/TheCowboyAI/cim-domain.git", branch = "main" }
 cim-domain-workflow = { path = "../cim-domain-workflow" }
 petgraph = "0.6"
 serde = { version = "1.0", features = ["derive"] }
